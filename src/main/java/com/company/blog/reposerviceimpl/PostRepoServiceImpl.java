@@ -5,10 +5,14 @@ import com.company.blog.repository.PostRepository;
 import com.company.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.persistence.PersistenceUnit;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +24,7 @@ public class PostRepoServiceImpl implements PostService {
     public PostRepoServiceImpl(PostRepository postRepository) {
         this.postRepository = postRepository;
     }
+
 
     @Override
     public Post findOneById(Long id) {
@@ -46,12 +51,5 @@ public class PostRepoServiceImpl implements PostService {
     public Page<Post> listAllByPage(Pageable pageable) {
         return postRepository.findAll(pageable);
     }
-
-
-//    @Override
-//    public Post getPostByDate(Date date) {
-//        return postRepository.getPostsByDate(date);
-//    }
-
 
 }

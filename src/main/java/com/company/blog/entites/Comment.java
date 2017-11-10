@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -18,6 +20,8 @@ public class Comment extends BaseEntity {
 
     private String content;
 
+    @ManyToOne
+    private Comment baseComment;
 
     @CreationTimestamp
     private Date dateTime;

@@ -9,6 +9,5 @@ import java.util.List;
 
 
 public interface PostRepository extends PagingAndSortingRepository<Post, Long>{
-    //Post getPostsByDate(Date date);
 
 }

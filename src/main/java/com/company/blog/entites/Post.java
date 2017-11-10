@@ -27,6 +27,7 @@ public class Post extends BaseEntity {
     private String content;
 
     @CreationTimestamp
+    @JsonFormat(pattern = "yy-mm-dd")
     private Date creationDate;
 
     private Long numberOfViews=0L;

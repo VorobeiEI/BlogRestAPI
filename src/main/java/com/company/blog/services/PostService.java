@@ -12,6 +12,4 @@ public interface PostService extends CRUDservice<Post> {
 
     Page<Post> listAllByPage(Pageable pageable);
 
-    //List<Post> getPostsByViews(Sort sort);
-
 }

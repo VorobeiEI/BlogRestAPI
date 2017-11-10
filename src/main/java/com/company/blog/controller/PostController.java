@@ -4,18 +4,15 @@ import com.company.blog.entites.Comment;
 import com.company.blog.entites.Post;
 import com.company.blog.requests.CreatePostRequest;
 import com.company.blog.requests.UpdatePostRequest;
-import com.company.blog.services.CommentService;
 import com.company.blog.services.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.Optional;
 
 /**
  * Created by jacksparrow on 10.11.17.
@@ -31,8 +28,22 @@ public class PostController {
         this.postService = postService;
     }
 
+    @GetMapping("/sortByRating")
+    public Page<Post> sortByRating(Pageable pageable){
+        Sort sortByDate = new Sort(new Sort.Order(Sort.Direction.DESC,"numberOfViews"));
+        pageable = new PageRequest(0,Integer.MAX_VALUE,sortByDate);
+        Page<Post> postsByDate = postService.listAllByPage(pageable);
+        return postsByDate;
+    }
+    @GetMapping("/sortByDate")
+    public Page<Post> sortByDateMethod(Pageable pageable){
+        Sort sortByDate = new Sort(new Sort.Order(Sort.Direction.ASC,"creationDate"));
+        pageable = new PageRequest(0,Integer.MAX_VALUE,sortByDate);
+        Page<Post> postsByDate = postService.listAllByPage(pageable);
+        return postsByDate;
+    }
     @GetMapping("/pagination")
-    Page<Post> takeWithPagination(Pageable pageable){
+    public Page<Post> takeWithPagination(Pageable pageable){
         Page<Post> posts = postService.listAllByPage(pageable);
         return posts;
     }
@@ -45,11 +56,11 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+
     @PostMapping
     public ResponseEntity<?> newPost(@RequestBody CreatePostRequest request){
         Post post = new Post();
         post.setContent(request.text);
-        //.setCreationDate(LocalDateTime.now());
         postService.saveOrUpdate(post);
         return new ResponseEntity<> (post.getId(), HttpStatus.CREATED);
     }
@@ -62,11 +73,6 @@ public class PostController {
         postService.saveOrUpdate(post);
         return post;
     }
-
-//    @GetMapping("/{date}")
-//    public Post showPostByDate(@PathVariable Date date){
-//        return postService.getPostByDate(date);
-//    }
 
     @PutMapping("/{id}/update")
     public ResponseEntity<?> updatePost(@RequestBody UpdatePostRequest updatePostRequest, @PathVariable Long id){
