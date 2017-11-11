@@ -27,7 +27,7 @@ public class Post extends BaseEntity {
     private String content;
 
     @CreationTimestamp
-    @JsonFormat(pattern = "yy-mm-dd")
+    @JsonFormat(pattern = "yy-MM-dd")
     private Date creationDate;
 
     private Long numberOfViews=0L;
@@ -37,6 +37,10 @@ public class Post extends BaseEntity {
 
     public void addComment(Comment comment){
         comments.add(comment);
+    }
+
+    public Comment getCommentById(Long id){
+        return comments.get(id.intValue());
     }
 
 }

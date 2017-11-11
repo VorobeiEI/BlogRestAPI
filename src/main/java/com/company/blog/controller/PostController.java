@@ -56,6 +56,15 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping("/addbasecomment")
+    public ResponseEntity<?> addComment(@RequestParam Long postId, @RequestParam Long commentId, @RequestBody CreatePostRequest request){
+        Post post = postService.findOneById(postId);
+        Comment comment = post.getCommentById(commentId);
+        comment.addChildComment(new Comment(request.text));
+        postService.saveOrUpdate(post);
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
 
     @PostMapping
     public ResponseEntity<?> newPost(@RequestBody CreatePostRequest request){

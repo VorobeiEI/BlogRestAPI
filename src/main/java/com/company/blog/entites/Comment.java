@@ -3,15 +3,16 @@ package com.company.blog.entites;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.*;
+import org.springframework.aop.target.LazyInitTargetSource;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -20,13 +21,18 @@ public class Comment extends BaseEntity {
 
     private String content;
 
-    @ManyToOne
-    private Comment baseComment;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Comment> childList;
+
 
     @CreationTimestamp
     private Date dateTime;
 
     public Comment(String content) {
         this.content = content;
+    }
+
+    public void addChildComment(Comment comment){
+        childList.add(comment);
     }
 }
